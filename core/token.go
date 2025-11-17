@@ -9,12 +9,12 @@ import (
 
 // appAccessTokenKey 应用访问令牌键
 func (config *Config) appAccessTokenKey() string {
-	return fmt.Sprintf("%s-%s", appAccessTokenKeyPrefix, config.AppId)
+	return fmt.Sprintf("app_access_token-%s", config.AppId)
 }
 
 // tenantAccessTokenKey 租户访问令牌键
 func (config *Config) tenantAccessTokenKey() string {
-	return fmt.Sprintf("%s-%s", tenantAccessTokenKeyPrefix, config.AppId)
+	return fmt.Sprintf("tenant_access_token-%s", config.AppId)
 }
 
 // getAppAccessToken 获取应用访问令牌
@@ -57,7 +57,7 @@ func (config *Config) getSelfBuiltAppAccessTokenThenCache(c context.Context) (st
 	// 请求应用访问令牌
 	rawResp, err := config.DoRequest(c, &Request{
 		HttpMethod: http.MethodPost,
-		ApiPath:    ApisAppAccessTokenInternal,
+		ApiPath:    "/open-apis/auth/v3/app_access_token/internal",
 		Body: &SelfBuiltAppAccessTokenReq{
 			AppId:     config.AppId,
 			AppSecret: config.AppSecret,
@@ -112,7 +112,7 @@ func (config *Config) getTenantAccessToken(c context.Context) (string, error) {
 func (config *Config) getSelfBuiltTenantAccessTokenThenCache(c context.Context) (string, error) {
 	rawResp, err := config.DoRequest(c, &Request{
 		HttpMethod: http.MethodPost,
-		ApiPath:    ApisTenantAccessTokenInternal,
+		ApiPath:    "/open-apis/auth/v3/tenant_access_token/internal",
 		Body: &SelfBuiltAppAccessTokenReq{
 			AppId:     config.AppId,
 			AppSecret: config.AppSecret,

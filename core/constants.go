@@ -22,19 +22,6 @@ const (
 )
 
 const (
-	// 应用访问令牌内部 URL 路径
-	ApisAppAccessTokenInternal string = "/open-apis/auth/v3/app_access_token/internal"
-	// 应用访问令牌 URL 路径
-	ApisAppAccessToken string = "/open-apis/auth/v3/app_access_token"
-	// 租户访问令牌内部 URL 路径
-	ApisTenantAccessTokenInternal string = "/open-apis/auth/v3/tenant_access_token/internal"
-	// 租户访问令牌 URL 路径
-	ApisTenantAccessToken string = "/open-apis/auth/v3/tenant_access_token"
-	// 应用票据重发 URL 路径
-	ApisAppTicketResend string = "/open-apis/auth/v3/app_ticket/resend"
-)
-
-const (
 	// 访问令牌无效错误码
 	errCodeAccessTokenInvalid = 99991671
 	// 应用访问令牌无效错误码
@@ -65,11 +52,4 @@ const (
 	AccessTokenTypeTenant AccessTokenType = "tenant_access_token"
 	// AccessTokenTypeUser 用户访问令牌
 	AccessTokenTypeUser AccessTokenType = "user_access_token"
-)
-
-const (
-	// 应用访问令牌前缀
-	appAccessTokenKeyPrefix = "app_access_token"
-	// 租户访问令牌前缀
-	tenantAccessTokenKeyPrefix = "tenant_access_token"
 )
