@@ -30,6 +30,11 @@ const (
 	errCodeTenantAccessTokenInvalid = 99991663
 )
 
+const (
+	FeishuBaseUrl = "https://open.feishu.cn"
+	LarkBaseUrl   = "https://open.larksuite.com"
+)
+
 // AppType 应用类型
 type AppType string
 

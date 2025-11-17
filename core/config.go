@@ -36,8 +36,12 @@ type Config struct {
 	serializable Serializable
 }
 
-func NewConfig() *Config {
+func NewConfig(appId, appSecret string) *Config {
 	return &Config{
+		BaseUrl:      FeishuBaseUrl,
+		AppId:        appId,
+		AppSecret:    appSecret,
+		AppType:      AppTypeSelfBuilt,
 		cache:        &defaultCache{},
 		logger:       newDefaultLogger(),
 		httpClient:   http.DefaultClient,

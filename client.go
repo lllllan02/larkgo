@@ -4,15 +4,13 @@ import (
 	"errors"
 
 	"github.com/lllllan02/larkgo/core"
-)
-
-const (
-	FeishuBaseUrl = "https://open.feishu.cn"
-	LarkBaseUrl   = "https://open.larksuite.com"
+	"github.com/lllllan02/larkgo/service/auth/v3"
 )
 
 type Client struct {
 	config *core.Config
+
+	AuthV3 *auth.V3
 }
 
 func NewClient(appId, appSecret string, options ...ClientOptionFunc) (*Client, error) {
@@ -21,17 +19,18 @@ func NewClient(appId, appSecret string, options ...ClientOptionFunc) (*Client, e
 	}
 
 	// 构建配置
-	config := &core.Config{
-		BaseUrl:   FeishuBaseUrl,
-		AppId:     appId,
-		AppSecret: appSecret,
-		AppType:   core.AppTypeSelfBuilt,
-	}
+	config := core.NewConfig(appId, appSecret)
 	for _, option := range options {
 		option(config)
 	}
 
-	return &Client{config: config}, nil
+	client := &Client{config: config}
+	client.InitService()
+	return client, nil
 }
 
 type ClientOptionFunc func(config *core.Config)
+
+func (client *Client) InitService() {
+	client.AuthV3 = auth.NewV3(client.config)
+}
