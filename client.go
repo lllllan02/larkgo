@@ -4,13 +4,13 @@ import (
 	"errors"
 
 	"github.com/lllllan02/larkgo/core"
-	"github.com/lllllan02/larkgo/service/auth/v3"
+	"github.com/lllllan02/larkgo/service/auth"
 )
 
 type Client struct {
 	config *core.Config
 
-	AuthV3 *auth.V3
+	Auth *auth.Service
 }
 
 func NewClient(appId, appSecret string, options ...ClientOptionFunc) (*Client, error) {
@@ -32,5 +32,5 @@ func NewClient(appId, appSecret string, options ...ClientOptionFunc) (*Client, e
 type ClientOptionFunc func(config *core.Config)
 
 func (client *Client) InitService() {
-	client.AuthV3 = auth.NewV3(client.config)
+	client.Auth = auth.NewService(client.config)
 }
