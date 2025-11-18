@@ -45,3 +45,22 @@ func (a *appAccessToken) Internal(c context.Context, req *InternalAppAccessToken
 type tenantAccessToken struct {
 	config *core.Config
 }
+
+func (t *tenantAccessToken) Internal(c context.Context, req *InternalTenantAccessTokenReq) (*InternalTenantAccessTokenResp, error) {
+	request := &core.Request{
+		HttpMethod: http.MethodPost,
+		ApiPath:    "/open-apis/auth/v3/tenant_access_token/internal",
+		Body:       req,
+	}
+
+	response, err := t.config.DoRequest(c, request)
+	if err != nil {
+		return nil, err
+	}
+
+	resp := &InternalTenantAccessTokenResp{Response: *response}
+	if err := t.config.JSONUnmarshalBody(response, resp); err != nil {
+		return nil, err
+	}
+	return resp, nil
+}

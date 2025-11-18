@@ -23,9 +23,16 @@ func TestMain(m *testing.M) {
 	os.Exit(m.Run())
 }
 
-func TestTenantAccessToken_Create(t *testing.T) {
+func TestAppAccessToken_Internal(t *testing.T) {
 	req := NewInternalAppAccessTokenReq(appId, appSecret)
 	resp, err := v3.AppAccessToken.Internal(context.Background(), req)
+	assert.NoError(t, err)
+	assert.NotNil(t, resp)
+}
+
+func TestTenantAccessToken_Internal(t *testing.T) {
+	req := NewInternalTenantAccessTokenReq(appId, appSecret)
+	resp, err := v3.TenantAccessToken.Internal(context.Background(), req)
 	assert.NoError(t, err)
 	assert.NotNil(t, resp)
 }
