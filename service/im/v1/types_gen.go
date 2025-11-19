@@ -454,3 +454,30 @@ func (req *DeleteChatMembersReq) WithIdList(idList ...string) *DeleteChatMembers
 	req.IdList = idList
 	return req
 }
+
+func NewGetChatMembersReq() *GetChatMembersReq {
+	return &GetChatMembersReq{
+		query: make(core.QueryParams),
+		path:  make(core.PathParams),
+	}
+}
+
+func (req *GetChatMembersReq) MemberIdType(memberIdType UserIdType) *GetChatMembersReq {
+	req.query.Set("member_id_type", fmt.Sprintf("%v", memberIdType))
+	return req
+}
+
+func (req *GetChatMembersReq) PageToken(pageToken string) *GetChatMembersReq {
+	req.query.Set("page_token", pageToken)
+	return req
+}
+
+func (req *GetChatMembersReq) PageSize(pageSize int) *GetChatMembersReq {
+	req.query.Set("page_size", strconv.FormatInt(int64(pageSize), 10))
+	return req
+}
+
+func (req *GetChatMembersReq) ChatId(chatId string) *GetChatMembersReq {
+	req.path.Set("chat_id", chatId)
+	return req
+}

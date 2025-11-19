@@ -66,12 +66,46 @@ func (cm *chatMembers) Delete(c context.Context, req *DeleteChatMembersReq) (*De
 		QueryParams:      req.query,
 		Body:             req,
 	}
+
 	response, err := cm.config.DoRequest(c, request)
 	if err != nil {
 		return nil, err
 	}
 
 	resp := &DeleteChatMembersResp{Response: *response}
+	if err := cm.config.JSONUnmarshalBody(response, resp); err != nil {
+		return nil, err
+	}
+	return resp, nil
+}
+
+// Get 获取群成员
+//
+//   - 飞书接口文档: https://open.feishu.cn/document/server-docs/group/chat-member/get
+//   - GitHub 源码地址: https://github.com/larksuite/oapi-sdk-go/blob/6116ef7bb0fa0dff80f8734335f8b8ad7697f0c7/service/im/v1/resource.go#L594
+//
+// 注意事项
+//   - 应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability);
+//   - 机器人或授权用户必须在群组中;
+//   - 该接口不会返回群内的机器人成员
+//   - 由于返回的群成员列表会过滤掉机器人成员，因此返回的群成员个数可能会小于指定的page_size
+//   - 如果有同一时间加入群的群成员，会一次性返回，这会导致返回的群成员个数可能会大于指定的page_size
+//   - 获取内部群信息时，操作者须与群组在同一租户下
+func (cm *chatMembers) Get(c context.Context, req *GetChatMembersReq) (*GetChatMembersResp, error) {
+	request := &core.Request{
+		HttpMethod:       http.MethodGet,
+		ApiPath:          "/open-apis/im/v1/chats/:chat_id/members",
+		AccessTokenTypes: []core.AccessTokenType{core.AccessTokenTypeUser, core.AccessTokenTypeTenant},
+		PathParams:       req.path,
+		QueryParams:      req.query,
+	}
+
+	response, err := cm.config.DoRequest(c, request)
+	if err != nil {
+		return nil, err
+	}
+
+	resp := &GetChatMembersResp{Response: *response}
 	if err := cm.config.JSONUnmarshalBody(response, resp); err != nil {
 		return nil, err
 	}

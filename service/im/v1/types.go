@@ -634,3 +634,51 @@ type DeleteChatMembersRespData struct {
 	// 无效成员列表
 	InvalidIdList []string `json:"invalid_id_list,omitempty"`
 }
+
+type GetChatMembersReq struct {
+	//@chat_id(string): 群 ID
+	path core.PathParams `json:"-"`
+
+	//@member_id_type(UserIdType): 用户 id 类型 (open_id/user_id/union_id)
+	//@page_token(string): 分页游标
+	//@page_size(int): 每页数量,最大值为 100,默认为 20
+	query core.QueryParams `json:"-"`
+}
+
+type GetChatMembersResp struct {
+	core.Response `json:"-"`
+	core.CodeError
+	Data *GetChatMembersRespData `json:"data"`
+}
+
+type GetChatMembersRespData struct {
+	// 是否还有更多项
+	HasMore *bool `json:"has_more,omitempty"`
+
+	// 成员总数
+	MemberTotal *int `json:"member_total,omitempty"`
+
+	// 分页标记，当 has_more 为 true 时，会同时返回新的 page_token，否则不返回 page_token
+	PageToken *string `json:"page_token,omitempty"`
+
+	// 成员列表
+	Items []*ListMember `json:"items,omitempty"`
+}
+
+type ListMember struct {
+	// 成员的用户 ID 类型，与查询参数中的 member_id_type 相同。取值为：`open_id`、`user_id`、`union_id`其中之一。
+	MemberIdType *string `json:"member_id_type,omitempty"`
+
+	// 成员的用户ID
+	//
+	// ID 值与查询参数中的 member_id_type 对应。;;不同 ID 的说明参见 [用户相关的 ID 概念](https://open.feishu.cn/document/home/user-identity-introduction/introduction)
+	MemberId *string `json:"member_id,omitempty"`
+
+	// 名字
+	Name *string `json:"name,omitempty"`
+
+	// 租户 Key
+	//
+	// 为租户在飞书上的唯一标识，用来换取对应的 tenant_access_token，也可以用作租户在应用中的唯一标识
+	TenantKey *string `json:"tenant_key,omitempty"`
+}

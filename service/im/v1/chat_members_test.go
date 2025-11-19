@@ -33,3 +33,15 @@ func TestChatMembers_Delete(t *testing.T) {
 	assert.NotNil(t, resp)
 	fmt.Printf("resp: %+v\n", core.ToMap(resp))
 }
+
+func TestChatMembers_Get(t *testing.T) {
+	req := NewGetChatMembersReq().
+		ChatId("oc_be2a237b03ac483a05c6521cb35386b2").
+		MemberIdType(UserIdTypeOpenId).
+		PageSize(20)
+
+	resp, err := v1.ChatMembers.Get(context.Background(), req)
+	assert.NoError(t, err)
+	assert.NotNil(t, resp)
+	fmt.Printf("resp: %+v\n", core.ToMap(resp))
+}
