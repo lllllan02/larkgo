@@ -9,6 +9,15 @@ const (
 	UserIdTypeUnionId UserIdType = "union_id" // 联合 ID
 )
 
+type MemberIdType string
+
+const (
+	MemberIdTypeOpenId  MemberIdType = "open_id"  // 开放 ID
+	MemberIdTypeUserId  MemberIdType = "user_id"  // 用户 ID
+	MemberIdTypeUnionId MemberIdType = "union_id" // 联合 ID
+	MemberIdTypeAppId   MemberIdType = "app_id"   // 应用 ID
+)
+
 // GroupMessageType 群消息模式
 type GroupMessageType string
 
@@ -98,4 +107,13 @@ type ChatSortType string
 const (
 	ChatSortTypeByCreateTimeAsc  ChatSortType = "ByCreateTimeAsc"  // 按创建时间升序(default)
 	ChatSortTypeByActiveTimeDesc ChatSortType = "ByActiveTimeDesc" // 按活跃时间降序
+)
+
+// SucceedType 成功类型
+type SucceedType int
+
+const (
+	SucceedType0 SucceedType = iota // 保持以前的策略，存在不可用的 ID 会拉群失败，返回错误响应(default)
+	SucceedType1                    // 将可用 ID 全部拉入群，返回拉群成功的响应，并展示不可用的 ID
+	SucceedType2                    // 存在不可用的 ID 会拉群失败，返回错误响应，并展示出不可用的 ID
 )

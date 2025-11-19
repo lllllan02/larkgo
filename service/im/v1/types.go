@@ -571,3 +571,44 @@ type UpdateChatResp struct {
 	core.Response `json:"-"`
 	core.CodeError
 }
+
+type CreateChatMembersReq struct {
+	//@chat_id(string): 群 ID
+	path core.PathParams `json:"-"`
+
+	//@member_id_type(MemberIdType): 用户 id 类型 (open_id/user_id/union_id)
+	//@succeed_type(SucceedType): 成功类型
+	query core.QueryParams `json:"-"`
+
+	// 成员 ID 列表
+	//
+	// 获取 ID 请参见[如何获得 User ID、Open ID 和 Union ID？](https://open.feishu.cn/document/home/user-identity-introduction/how-to-get)
+	//
+	// **注意**：
+	// 	- 成员列表不可为空
+	// 	- 每次请求最多拉 50 个用户或者 5 个机器人，并且群组最多容纳 15 个机器人
+	// 	- 列表中填写的成员 ID 类型应与 ==member_id_type== 参数中选择的类型相对应
+	// 	- 对于已认证企业的飞书的群人数默认上限：普通群 5000 人，会议群 3000 人，话题群 5000 人。若租户管理员配置了群人数上限，则群人数上限为该人数上限。
+	IdList []string `json:"id_list,omitempty"`
+}
+
+type CreateChatMembersResp struct {
+	core.Response `json:"-"`
+	core.CodeError
+	Data *CreateChatMembersRespData `json:"data"`
+}
+
+type CreateChatMembersRespData struct {
+	// 无效成员列表
+	//
+	// **注意**：
+	// 	- 当`success_type=0`时，`invalid_id_list`只包含已离职的用户ID
+	// 	- 当`success_type=1`时，`invalid_id_list`中包含已离职的、不可见的、应用未激活的ID
+	InvalidIdList []string `json:"invalid_id_list,omitempty"`
+
+	// ID 不存在的成员列表
+	NotExistedIdList []string `json:"not_existed_id_list,omitempty"`
+
+	// 等待群主或管理员审批的成员 ID 列表
+	PendingApprovalIdList []string `json:"pending_approval_id_list,omitempty"`
+}

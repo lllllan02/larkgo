@@ -405,3 +405,30 @@ func (req *UpdateChatReq) WithRestrictedModeSetting(restrictedModeSetting Restri
 	req.RestrictedModeSetting = &restrictedModeSetting
 	return req
 }
+
+func NewCreateChatMembersReq() *CreateChatMembersReq {
+	return &CreateChatMembersReq{
+		query: make(core.QueryParams),
+		path:  make(core.PathParams),
+	}
+}
+
+func (req *CreateChatMembersReq) MemberIdType(memberIdType MemberIdType) *CreateChatMembersReq {
+	req.query.Set("member_id_type", fmt.Sprintf("%v", memberIdType))
+	return req
+}
+
+func (req *CreateChatMembersReq) SucceedType(succeedType SucceedType) *CreateChatMembersReq {
+	req.query.Set("succeed_type", fmt.Sprintf("%v", succeedType))
+	return req
+}
+
+func (req *CreateChatMembersReq) ChatId(chatId string) *CreateChatMembersReq {
+	req.path.Set("chat_id", chatId)
+	return req
+}
+
+func (req *CreateChatMembersReq) WithIdList(idList ...string) *CreateChatMembersReq {
+	req.IdList = idList
+	return req
+}
