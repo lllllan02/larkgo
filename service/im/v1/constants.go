@@ -82,3 +82,12 @@ const (
 	ModerationPermissionAllMembers    ModerationPermission = "all_members"    // 所有成员
 	ModerationPermissionModeratorList ModerationPermission = "moderator_list" // 指定群成员
 )
+
+// ValidityPeriod 群分享链接有效时长
+type ValidityPeriod string
+
+const (
+	ValidityPeriodWeek        ValidityPeriod = "week"        // 7天
+	ValidityPeriodYear        ValidityPeriod = "year"        // 1年
+	ValidityPeriodPermanently ValidityPeriod = "permanently" // 永久
+)

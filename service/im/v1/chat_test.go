@@ -40,3 +40,12 @@ func TestChat_Get(t *testing.T) {
 	assert.NotNil(t, resp)
 	fmt.Printf("resp: %+v\n", core.ToMap(resp))
 }
+
+func TestChat_Link(t *testing.T) {
+	req := NewLinkChatReq().ChatId("oc_61d20c6e99f180247f2e0b6eec2d2bce")
+
+	resp, err := v1.Chat.Link(context.Background(), req)
+	assert.NoError(t, err)
+	assert.NotNil(t, resp)
+	fmt.Printf("resp: %+v\n", core.ToMap(resp))
+}

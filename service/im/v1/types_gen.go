@@ -215,3 +215,19 @@ func (req *GetChatReq) ChatId(chatId string) *GetChatReq {
 	req.path.Set("chat_id", chatId)
 	return req
 }
+
+func NewLinkChatReq() *LinkChatReq {
+	return &LinkChatReq{
+		path: make(core.PathParams),
+	}
+}
+
+func (req *LinkChatReq) ChatId(chatId string) *LinkChatReq {
+	req.path.Set("chat_id", chatId)
+	return req
+}
+
+func (req *LinkChatReq) WithValidityPeriod(validityPeriod ValidityPeriod) *LinkChatReq {
+	req.ValidityPeriod = &validityPeriod
+	return req
+}

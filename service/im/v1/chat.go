@@ -99,3 +99,36 @@ func (chat *chat) Get(c context.Context, req *GetChatReq) (*GetChatResp, error) 
 	}
 	return resp, nil
 }
+
+// Link 生成群分享链接
+//
+//   - 飞书接口文档: https://open.feishu.cn/document/server-docs/group/chat/link
+//   - GitHub 源码地址: https://github.com/larksuite/oapi-sdk-go/blob/6116ef7bb0fa0dff80f8734335f8b8ad7697f0c7/service/im/v1/resource.go#L298
+//
+// 注意事项
+//   - 应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)
+//   - access_token 所对应的 **机器人** 或 **授权用户** 必须在 `chat_id` 参数指定的群组中;
+//   - 单聊、密聊、团队群不支持分享群链接
+//   - 当 Bot 被停用或 Bot 退出群组时，Bot 生成的群链接也将停用
+//   - 当群聊开启了 ==仅群主和群管理员可添加群成员/分享群== 设置时，仅 **群主** 和 **群管理员** 可以获取群分享链接
+//   - 获取内部群分享链接时，操作者须与群组在同一租户下
+func (chat *chat) Link(c context.Context, req *LinkChatReq) (*LinkChatResp, error) {
+	request := &core.Request{
+		HttpMethod:       http.MethodPost,
+		ApiPath:          "/open-apis/im/v1/chats/:chat_id/link",
+		AccessTokenTypes: []core.AccessTokenType{core.AccessTokenTypeTenant, core.AccessTokenTypeUser},
+		PathParams:       req.path,
+		Body:             req,
+	}
+
+	response, err := chat.config.DoRequest(c, request)
+	if err != nil {
+		return nil, err
+	}
+
+	resp := &LinkChatResp{Response: *response}
+	if err := chat.config.JSONUnmarshalBody(response, resp); err != nil {
+		return nil, err
+	}
+	return resp, nil
+}

@@ -384,3 +384,28 @@ type GetChatRespData struct {
 	// 防泄密模式设置
 	RestrictedModeSetting *RestrictedModeSetting `json:"restricted_mode_setting,omitempty"`
 }
+
+type LinkChatReq struct {
+	//@chat_id(string): 群 ID
+	path core.PathParams `json:"-"`
+
+	// 群分享链接有效时长
+	ValidityPeriod *ValidityPeriod `json:"validity_period,omitempty"`
+}
+
+type LinkChatResp struct {
+	core.Response `json:"-"`
+	core.CodeError
+	Data *LinkChatRespData `json:"data"`
+}
+
+type LinkChatRespData struct {
+	// 群分享链接
+	ShareLink *string `json:"share_link,omitempty"`
+
+	// 分享链接过期时间戳（秒级）
+	ExpireTime *string `json:"expire_time,omitempty"`
+
+	// 分享链接是否永久有效
+	IsPermanent *bool `json:"is_permanent,omitempty"`
+}
