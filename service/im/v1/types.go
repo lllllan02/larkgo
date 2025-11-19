@@ -612,3 +612,25 @@ type CreateChatMembersRespData struct {
 	// 等待群主或管理员审批的成员 ID 列表
 	PendingApprovalIdList []string `json:"pending_approval_id_list,omitempty"`
 }
+
+type DeleteChatMembersReq struct {
+	//@chat_id(string): 群 ID
+	path core.PathParams `json:"-"`
+
+	//@member_id_type(MemberIdType): 用户 id 类型 (open_id/user_id/union_id)
+	query core.QueryParams `json:"-"`
+
+	// 成员 ID 列表
+	IdList []string `json:"id_list,omitempty"`
+}
+
+type DeleteChatMembersResp struct {
+	core.Response `json:"-"`
+	core.CodeError
+	Data *DeleteChatMembersRespData `json:"data"`
+}
+
+type DeleteChatMembersRespData struct {
+	// 无效成员列表
+	InvalidIdList []string `json:"invalid_id_list,omitempty"`
+}

@@ -432,3 +432,25 @@ func (req *CreateChatMembersReq) WithIdList(idList ...string) *CreateChatMembers
 	req.IdList = idList
 	return req
 }
+
+func NewDeleteChatMembersReq() *DeleteChatMembersReq {
+	return &DeleteChatMembersReq{
+		query: make(core.QueryParams),
+		path:  make(core.PathParams),
+	}
+}
+
+func (req *DeleteChatMembersReq) MemberIdType(memberIdType MemberIdType) *DeleteChatMembersReq {
+	req.query.Set("member_id_type", fmt.Sprintf("%v", memberIdType))
+	return req
+}
+
+func (req *DeleteChatMembersReq) ChatId(chatId string) *DeleteChatMembersReq {
+	req.path.Set("chat_id", chatId)
+	return req
+}
+
+func (req *DeleteChatMembersReq) WithIdList(idList ...string) *DeleteChatMembersReq {
+	req.IdList = idList
+	return req
+}

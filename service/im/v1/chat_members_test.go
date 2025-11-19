@@ -21,3 +21,15 @@ func TestChatMembers_Create(t *testing.T) {
 	assert.NotNil(t, resp)
 	fmt.Printf("resp: %+v\n", core.ToMap(resp))
 }
+
+func TestChatMembers_Delete(t *testing.T) {
+	req := NewDeleteChatMembersReq().
+		ChatId("oc_be2a237b03ac483a05c6521cb35386b2").
+		MemberIdType(MemberIdTypeUserId).
+		WithIdList("dga1a78e")
+
+	resp, err := v1.ChatMembers.Delete(context.Background(), req)
+	assert.NoError(t, err)
+	assert.NotNil(t, resp)
+	fmt.Printf("resp: %+v\n", core.ToMap(resp))
+}
