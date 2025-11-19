@@ -491,3 +491,83 @@ type SearchChatRespData struct {
 	// chat 列表
 	Items []*ListChat `json:"items,omitempty"`
 }
+
+type UpdateChatReq struct {
+	//@chat_id(string): 群 ID
+	path core.PathParams `json:"-"`
+
+	//@user_id_type(UserIdType): 用户 id 类型 (open_id/user_id/union_id)
+	query core.QueryParams `json:"-"`
+
+	// 群名称
+	Name *string `json:"name,omitempty"`
+
+	// 群描述
+	Description *string `json:"description,omitempty"`
+
+	// 群头像对应的 Image Key，可通过[上传图片](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/image/create)获取（注意：上传图片的 ==image_type== 需要指定为 ==avatar==）
+	Avatar *string `json:"avatar,omitempty"`
+
+	// 群国际化名称
+	I18nNames *I18nNames `json:"i18n_names,omitempty"`
+
+	// 新群主 ID
+	OwnerId *string `json:"owner_id,omitempty"`
+
+	// 群标签
+	Labels []string `json:"labels,omitempty"`
+
+	// 群快捷组件列表
+	ToolkitIds []string `json:"toolkit_ids,omitempty"`
+
+	// 群类型
+	ChatType *ChatType `json:"chat_type,omitempty"`
+
+	// 群消息模式
+	GroupMessageType *GroupMessageType `json:"group_message_type,omitempty"`
+
+	// 加群审批
+	MembershipApproval *MembershipApproval `json:"membership_approval,omitempty"`
+
+	// 入群消息可见性
+	JoinMessageVisibility *MessageVisibility `json:"join_message_visibility,omitempty"`
+
+	// 出群消息可见性
+	LeaveMessageVisibility *MessageVisibility `json:"leave_message_visibility,omitempty"`
+
+	// 邀请用户或机器人入群权限
+	//
+	// 注意：
+	// 	- 若值设置为 `only_owner`，则 share_card_permission 只能设置为 `not_allowed`
+	// 	- 若值设置为 `all_members`，则 share_card_permission 只能设置为 `allowed`
+	AddMemberPermission *PermissionLevel `json:"add_member_permission,omitempty"`
+
+	// 群分享权限
+	ShareCardPermission *PermissionLevel `json:"share_card_permission,omitempty"`
+
+	// at 所有人权限
+	AtAllPermission *PermissionLevel `json:"at_all_permission,omitempty"`
+
+	// 群编辑权限
+	EditPermission *PermissionLevel `json:"edit_permission,omitempty"`
+
+	// 谁可以加急
+	UrgentSetting *PermissionLevel `json:"urgent_setting,omitempty"`
+
+	// 谁可以发起视频会议
+	VideoConferenceSetting *PermissionLevel `json:"video_conference_setting,omitempty"`
+
+	// 谁可以管理置顶
+	PinManageSetting *PermissionLevel `json:"pin_manage_setting,omitempty"`
+
+	// 隐藏群成员人数设置
+	HideMemberCountSetting *PermissionLevel `json:"hide_member_count_setting,omitempty"`
+
+	// 防泄密模式设置
+	RestrictedModeSetting *RestrictedModeSetting `json:"restricted_mode_setting,omitempty"`
+}
+
+type UpdateChatResp struct {
+	core.Response `json:"-"`
+	core.CodeError
+}

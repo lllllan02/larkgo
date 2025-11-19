@@ -188,3 +188,39 @@ func (chat *chat) Search(c context.Context, req *SearchChatReq) (*SearchChatResp
 	}
 	return resp, nil
 }
+
+// Update 更新群信息
+//
+//   - 飞书接口文档: https://open.feishu.cn/document/server-docs/group/chat/update-2
+//   - GitHub 源码地址: https://github.com/larksuite/oapi-sdk-go/blob/6116ef7bb0fa0dff80f8734335f8b8ad7697f0c7/service/im/v1/resource.go#L398
+//
+// 注意事项
+//   - 应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)
+//   - 对于群主/群管理员 或 创建群组且具备 ==更新应用所创建群的群信息== 权限的机器人，可更新所有信息
+//   - 对于不满足上述权限条件的群成员或机器人
+//     1. 若未开启 ==仅群主和群管理员可编辑群信息== 配置，仅可更新群头像、群名称、群描述、群国际化名称信息
+//     2. 若开启了 ==仅群主和群管理员可编辑群信息== 配置，任何群信息都不能修改
+//   - 如果同时更新 ==邀请用户或机器人入群权限== 和 ==群分享权限== 这两项设置需要满足以下条件：;
+//     1. 若未开启 ==仅群主和管理员可以邀请用户或机器人入群==，需要设置 ==群分享权限== 为 ==允许分享==;
+//     2. 若开启了 ==仅群主和管理员可以邀请用户或机器人入群==，需要设置 ==群分享权限== 为 ==不允许分享==
+func (chat *chat) Update(c context.Context, req *UpdateChatReq) (*UpdateChatResp, error) {
+	request := &core.Request{
+		HttpMethod:       http.MethodPut,
+		ApiPath:          "/open-apis/im/v1/chats/:chat_id",
+		AccessTokenTypes: []core.AccessTokenType{core.AccessTokenTypeTenant, core.AccessTokenTypeUser},
+		PathParams:       req.path,
+		QueryParams:      req.query,
+		Body:             req,
+	}
+
+	response, err := chat.config.DoRequest(c, request)
+	if err != nil {
+		return nil, err
+	}
+
+	resp := &UpdateChatResp{Response: *response}
+	if err := chat.config.JSONUnmarshalBody(response, resp); err != nil {
+		return nil, err
+	}
+	return resp, nil
+}

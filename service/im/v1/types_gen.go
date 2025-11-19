@@ -283,3 +283,125 @@ func (req *SearchChatReq) PageSize(pageSize int) *SearchChatReq {
 	req.query.Set("page_size", strconv.FormatInt(int64(pageSize), 10))
 	return req
 }
+
+func NewUpdateChatReq() *UpdateChatReq {
+	return &UpdateChatReq{
+		query: make(core.QueryParams),
+		path:  make(core.PathParams),
+	}
+}
+
+func (req *UpdateChatReq) UserIdType(userIdType UserIdType) *UpdateChatReq {
+	req.query.Set("user_id_type", fmt.Sprintf("%v", userIdType))
+	return req
+}
+
+func (req *UpdateChatReq) ChatId(chatId string) *UpdateChatReq {
+	req.path.Set("chat_id", chatId)
+	return req
+}
+
+func (req *UpdateChatReq) WithName(name string) *UpdateChatReq {
+	req.Name = &name
+	return req
+}
+
+func (req *UpdateChatReq) WithDescription(description string) *UpdateChatReq {
+	req.Description = &description
+	return req
+}
+
+func (req *UpdateChatReq) WithAvatar(avatar string) *UpdateChatReq {
+	req.Avatar = &avatar
+	return req
+}
+
+func (req *UpdateChatReq) WithI18nNames(i18nNames I18nNames) *UpdateChatReq {
+	req.I18nNames = &i18nNames
+	return req
+}
+
+func (req *UpdateChatReq) WithOwnerId(ownerId string) *UpdateChatReq {
+	req.OwnerId = &ownerId
+	return req
+}
+
+func (req *UpdateChatReq) WithLabels(labels ...string) *UpdateChatReq {
+	req.Labels = labels
+	return req
+}
+
+func (req *UpdateChatReq) WithToolkitIds(toolkitIds ...string) *UpdateChatReq {
+	req.ToolkitIds = toolkitIds
+	return req
+}
+
+func (req *UpdateChatReq) WithChatType(chatType ChatType) *UpdateChatReq {
+	req.ChatType = &chatType
+	return req
+}
+
+func (req *UpdateChatReq) WithGroupMessageType(groupMessageType GroupMessageType) *UpdateChatReq {
+	req.GroupMessageType = &groupMessageType
+	return req
+}
+
+func (req *UpdateChatReq) WithMembershipApproval(membershipApproval MembershipApproval) *UpdateChatReq {
+	req.MembershipApproval = &membershipApproval
+	return req
+}
+
+func (req *UpdateChatReq) WithJoinMessageVisibility(joinMessageVisibility MessageVisibility) *UpdateChatReq {
+	req.JoinMessageVisibility = &joinMessageVisibility
+	return req
+}
+
+func (req *UpdateChatReq) WithLeaveMessageVisibility(leaveMessageVisibility MessageVisibility) *UpdateChatReq {
+	req.LeaveMessageVisibility = &leaveMessageVisibility
+	return req
+}
+
+func (req *UpdateChatReq) WithAddMemberPermission(addMemberPermission PermissionLevel) *UpdateChatReq {
+	req.AddMemberPermission = &addMemberPermission
+	return req
+}
+
+func (req *UpdateChatReq) WithShareCardPermission(shareCardPermission PermissionLevel) *UpdateChatReq {
+	req.ShareCardPermission = &shareCardPermission
+	return req
+}
+
+func (req *UpdateChatReq) WithAtAllPermission(atAllPermission PermissionLevel) *UpdateChatReq {
+	req.AtAllPermission = &atAllPermission
+	return req
+}
+
+func (req *UpdateChatReq) WithEditPermission(editPermission PermissionLevel) *UpdateChatReq {
+	req.EditPermission = &editPermission
+	return req
+}
+
+func (req *UpdateChatReq) WithUrgentSetting(urgentSetting PermissionLevel) *UpdateChatReq {
+	req.UrgentSetting = &urgentSetting
+	return req
+}
+
+func (req *UpdateChatReq) WithVideoConferenceSetting(videoConferenceSetting PermissionLevel) *UpdateChatReq {
+	req.VideoConferenceSetting = &videoConferenceSetting
+	return req
+}
+
+func (req *UpdateChatReq) WithPinManageSetting(pinManageSetting PermissionLevel) *UpdateChatReq {
+	req.PinManageSetting = &pinManageSetting
+	return req
+}
+
+func (req *UpdateChatReq) WithHideMemberCountSetting(hideMemberCountSetting PermissionLevel) *UpdateChatReq {
+	req.HideMemberCountSetting = &hideMemberCountSetting
+	return req
+}
+
+func (req *UpdateChatReq) WithRestrictedModeSetting(restrictedModeSetting RestrictedModeSetting) *UpdateChatReq {
+	req.RestrictedModeSetting = &restrictedModeSetting
+	return req
+}
