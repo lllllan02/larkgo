@@ -32,6 +32,15 @@ const (
 	ChatTypePrivate ChatType = "private" // 私有
 )
 
+// ChatStatus 群状态
+type ChatStatus string
+
+const (
+	ChatStatusNormal        ChatStatus = "normal"         // 正常
+	ChatStatusDissolved     ChatStatus = "dissolved"      // 解散
+	ChatStatusDissolvedSave ChatStatus = "dissolved_save" // 解散并保留
+)
+
 // MessageVisibility 消息可见性
 type MessageVisibility string
 

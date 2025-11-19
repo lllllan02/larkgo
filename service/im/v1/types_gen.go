@@ -198,3 +198,20 @@ func (req *DeleteChatReq) ChatId(chatId string) *DeleteChatReq {
 	req.path.Set("chat_id", chatId)
 	return req
 }
+
+func NewGetChatReq() *GetChatReq {
+	return &GetChatReq{
+		query: make(core.QueryParams),
+		path:  make(core.PathParams),
+	}
+}
+
+func (req *GetChatReq) UserIdType(userIdType UserIdType) *GetChatReq {
+	req.query.Set("user_id_type", fmt.Sprintf("%v", userIdType))
+	return req
+}
+
+func (req *GetChatReq) ChatId(chatId string) *GetChatReq {
+	req.path.Set("chat_id", chatId)
+	return req
+}

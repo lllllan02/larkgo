@@ -2,6 +2,7 @@ package core
 
 import (
 	"bytes"
+	"encoding/json"
 	"fmt"
 	"io"
 	"net/http"
@@ -124,4 +125,13 @@ func prettify(v reflect.Value, indent int, buf *bytes.Buffer) {
 		}
 		fmt.Fprintf(buf, format, v.Interface())
 	}
+}
+
+// ToMap 将结构体转换为 map，递归处理指针和嵌套结构体
+// 主要用于调试打印，将指针字段展开为实际值
+func ToMap(v interface{}) map[string]interface{} {
+	var m map[string]interface{}
+	b, _ := json.Marshal(v)
+	json.Unmarshal(b, &m)
+	return m
 }
