@@ -257,3 +257,29 @@ func (req *ListChatReq) PageSize(pageSize int) *ListChatReq {
 	req.query.Set("page_size", strconv.FormatInt(int64(pageSize), 10))
 	return req
 }
+
+func NewSearchChatReq() *SearchChatReq {
+	return &SearchChatReq{
+		query: make(core.QueryParams),
+	}
+}
+
+func (req *SearchChatReq) UserIdType(userIdType UserIdType) *SearchChatReq {
+	req.query.Set("user_id_type", fmt.Sprintf("%v", userIdType))
+	return req
+}
+
+func (req *SearchChatReq) Query(query string) *SearchChatReq {
+	req.query.Set("query", query)
+	return req
+}
+
+func (req *SearchChatReq) PageToken(pageToken string) *SearchChatReq {
+	req.query.Set("page_token", pageToken)
+	return req
+}
+
+func (req *SearchChatReq) PageSize(pageSize int) *SearchChatReq {
+	req.query.Set("page_size", strconv.FormatInt(int64(pageSize), 10))
+	return req
+}

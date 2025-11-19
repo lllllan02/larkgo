@@ -466,3 +466,28 @@ type ListChat struct {
 	// 群状态
 	ChatStatus *ChatStatus `json:"chat_status,omitempty"`
 }
+
+type SearchChatReq struct {
+	//@user_id_type(UserIdType): 用户 id 类型 (open_id/user_id/union_id)
+	//@query(string): 搜索关键词
+	//@page_token(string): 分页游标
+	//@page_size(int): 每页数量,最大值为 100,默认为 20
+	query core.QueryParams `json:"-"`
+}
+
+type SearchChatResp struct {
+	core.Response `json:"-"`
+	core.CodeError
+	Data *SearchChatRespData `json:"data"`
+}
+
+type SearchChatRespData struct {
+	// 是否还有更多项
+	HasMore *bool `json:"has_more,omitempty"`
+
+	// 分页标记，当 has_more 为 true 时，会同时返回新的 page_token，否则不返回 page_token
+	PageToken *string `json:"page_token,omitempty"`
+
+	// chat 列表
+	Items []*ListChat `json:"items,omitempty"`
+}

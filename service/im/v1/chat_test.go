@@ -61,3 +61,15 @@ func TestChat_List(t *testing.T) {
 	assert.NotNil(t, resp)
 	fmt.Printf("resp: %+v\n", core.ToMap(resp))
 }
+
+func TestChat_Search(t *testing.T) {
+	req := NewSearchChatReq().
+		UserIdType(UserIdTypeUserId).
+		Query("test").
+		PageSize(20)
+
+	resp, err := v1.Chat.Search(context.Background(), req)
+	assert.NoError(t, err)
+	assert.NotNil(t, resp)
+	fmt.Printf("resp: %+v\n", core.ToMap(resp))
+}

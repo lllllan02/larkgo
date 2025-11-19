@@ -161,3 +161,30 @@ func (chat *chat) List(c context.Context, req *ListChatReq) (*ListChatResp, erro
 	}
 	return resp, nil
 }
+
+// Search 搜索群
+//
+//   - 飞书接口文档: https://open.feishu.cn/document/server-docs/group/chat/search
+//   - GitHub 源码地址: https://github.com/larksuite/oapi-sdk-go/blob/6116ef7bb0fa0dff80f8734335f8b8ad7697f0c7/service/im/v1/resource.go#L362
+//
+// 注意事项
+//   - 应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)
+func (chat *chat) Search(c context.Context, req *SearchChatReq) (*SearchChatResp, error) {
+	request := &core.Request{
+		HttpMethod:       http.MethodGet,
+		ApiPath:          "/open-apis/im/v1/chats/search",
+		AccessTokenTypes: []core.AccessTokenType{core.AccessTokenTypeUser, core.AccessTokenTypeTenant},
+		QueryParams:      req.query,
+	}
+
+	response, err := chat.config.DoRequest(c, request)
+	if err != nil {
+		return nil, err
+	}
+
+	resp := &SearchChatResp{Response: *response}
+	if err := chat.config.JSONUnmarshalBody(response, resp); err != nil {
+		return nil, err
+	}
+	return resp, nil
+}
