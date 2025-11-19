@@ -125,6 +125,9 @@ func processStructDeclaration(n ast.Node, ctx *generatorContext) {
 	// 生成 query 参数方法
 	generateQueryMethods(ctx, structType, structName)
 
+	// 生成 path 参数方法
+	generatePathMethods(ctx, structType, structName)
+
 	// 生成字段的 With 方法
 	generateFieldMethods(ctx, structType, structName)
 }
@@ -170,17 +173,31 @@ func shouldGenerateStruct(structName string, forceGen bool) bool {
 
 func generateNewFunction(ctx *generatorContext, structType *ast.StructType, structName string) {
 	queryParamsField := findQueryParamsField(structType)
+	pathParamsField := findPathParamsField(structType)
 	hasQueryParams := queryParamsField != ""
+	hasPathParams := pathParamsField != ""
 
 	ctx.methodsBuf.WriteString(fmt.Sprintf("func New%s() *%s {\n", structName, structName))
 
-	if hasQueryParams {
-		queryParamsType := getQueryParamsType(structType)
-		if strings.HasPrefix(queryParamsType, "core.") {
-			ctx.needCore = true
-		}
+	if hasQueryParams || hasPathParams {
 		ctx.methodsBuf.WriteString(fmt.Sprintf("\treturn &%s{\n", structName))
-		ctx.methodsBuf.WriteString(fmt.Sprintf("\t\t%s: make(%s),\n", queryParamsField, queryParamsType))
+
+		if hasQueryParams {
+			queryParamsType := getQueryParamsType(structType)
+			if strings.HasPrefix(queryParamsType, "core.") {
+				ctx.needCore = true
+			}
+			ctx.methodsBuf.WriteString(fmt.Sprintf("\t\t%s: make(%s),\n", queryParamsField, queryParamsType))
+		}
+
+		if hasPathParams {
+			pathParamsType := getPathParamsType(structType)
+			if strings.HasPrefix(pathParamsType, "core.") {
+				ctx.needCore = true
+			}
+			ctx.methodsBuf.WriteString(fmt.Sprintf("\t\t%s: make(%s),\n", pathParamsField, pathParamsType))
+		}
+
 		ctx.methodsBuf.WriteString("\t}\n")
 	} else {
 		ctx.methodsBuf.WriteString(fmt.Sprintf("\treturn &%s{}\n", structName))
@@ -198,7 +215,7 @@ func generateQueryMethods(ctx *generatorContext, structType *ast.StructType, str
 	var queryParams []queryParam
 	for _, field := range structType.Fields.List {
 		if isQueryParamsField(field) {
-			queryParams = parseQueryCommentsFromField(field)
+			queryParams = parseParamCommentsFromField(field)
 			break
 		}
 	}
@@ -208,7 +225,7 @@ func generateQueryMethods(ctx *generatorContext, structType *ast.StructType, str
 
 		methodName := toCamelCase(qp.key)
 		paramName := toLowerCamelCase(qp.key)
-		setterCode := generateQuerySetterCode(ctx, queryParamsField, qp, paramName)
+		setterCode := generateParamSetterCode(ctx, queryParamsField, qp, paramName)
 
 		ctx.methodsBuf.WriteString(fmt.Sprintf("func (req *%s) %s(%s %s) *%s {\n",
 			structName, methodName, paramName, qp.typ, structName))
@@ -218,25 +235,74 @@ func generateQueryMethods(ctx *generatorContext, structType *ast.StructType, str
 	}
 }
 
-func generateQuerySetterCode(ctx *generatorContext, queryParamsField string, qp queryParam, paramName string) string {
-	switch qp.typ {
+func generatePathMethods(ctx *generatorContext, structType *ast.StructType, structName string) {
+	pathParamsField := findPathParamsField(structType)
+	if pathParamsField == "" {
+		return
+	}
+
+	var pathParams []queryParam
+	for _, field := range structType.Fields.List {
+		if isPathParamsField(field) {
+			pathParams = parseParamCommentsFromField(field)
+			break
+		}
+	}
+
+	for _, pp := range pathParams {
+		ctx.hasContent = true
+
+		methodName := toCamelCase(pp.key)
+		paramName := toLowerCamelCase(pp.key)
+		setterCode := generateParamSetterCode(ctx, pathParamsField, pp, paramName)
+
+		ctx.methodsBuf.WriteString(fmt.Sprintf("func (req *%s) %s(%s %s) *%s {\n",
+			structName, methodName, paramName, pp.typ, structName))
+		ctx.methodsBuf.WriteString(setterCode)
+		ctx.methodsBuf.WriteString("\treturn req\n")
+		ctx.methodsBuf.WriteString("}\n\n")
+	}
+}
+
+// generateParamSetterCode 生成参数 setter 代码（通用于 query 和 path）
+func generateParamSetterCode(ctx *generatorContext, paramsField string, param queryParam, paramName string) string {
+	switch param.typ {
 	case "string":
-		return fmt.Sprintf("\treq.%s.Set(%q, %s)\n", queryParamsField, qp.key, paramName)
-	case "int", "int64":
+		return fmt.Sprintf("\treq.%s.Set(%q, %s)\n", paramsField, param.key, paramName)
+
+	// 有符号整数类型
+	case "int", "int8", "int16", "int32", "int64":
 		ctx.needStrconv = true
-		return fmt.Sprintf("\treq.%s.Set(%q, strconv.FormatInt(int64(%s), 10))\n", queryParamsField, qp.key, paramName)
+		return fmt.Sprintf("\treq.%s.Set(%q, strconv.FormatInt(int64(%s), 10))\n", paramsField, param.key, paramName)
+
+	// 无符号整数类型
+	case "uint", "uint8", "uint16", "uint32", "uint64":
+		ctx.needStrconv = true
+		return fmt.Sprintf("\treq.%s.Set(%q, strconv.FormatUint(uint64(%s), 10))\n", paramsField, param.key, paramName)
+
+	// 浮点数类型
+	case "float32":
+		ctx.needStrconv = true
+		return fmt.Sprintf("\treq.%s.Set(%q, strconv.FormatFloat(float64(%s), 'f', -1, 32))\n", paramsField, param.key, paramName)
+	case "float64":
+		ctx.needStrconv = true
+		return fmt.Sprintf("\treq.%s.Set(%q, strconv.FormatFloat(%s, 'f', -1, 64))\n", paramsField, param.key, paramName)
+
+	// 布尔类型
 	case "bool":
 		ctx.needStrconv = true
-		return fmt.Sprintf("\treq.%s.Set(%q, strconv.FormatBool(%s))\n", queryParamsField, qp.key, paramName)
+		return fmt.Sprintf("\treq.%s.Set(%q, strconv.FormatBool(%s))\n", paramsField, param.key, paramName)
+
+	// 其他类型使用 fmt.Sprintf
 	default:
 		ctx.needFmt = true
-		return fmt.Sprintf("\treq.%s.Set(%q, fmt.Sprintf(\"%%v\", %s))\n", queryParamsField, qp.key, paramName)
+		return fmt.Sprintf("\treq.%s.Set(%q, fmt.Sprintf(\"%%v\", %s))\n", paramsField, param.key, paramName)
 	}
 }
 
 func generateFieldMethods(ctx *generatorContext, structType *ast.StructType, structName string) {
 	for _, field := range structType.Fields.List {
-		if len(field.Names) == 0 || isQueryParamsField(field) {
+		if len(field.Names) == 0 || isQueryParamsField(field) || isPathParamsField(field) {
 			continue
 		}
 
@@ -479,6 +545,52 @@ func getQueryParamsType(structType *ast.StructType) string {
 	return "QueryParams"
 }
 
+// findPathParamsField 查找结构体中 PathParams 类型的字段名
+func findPathParamsField(structType *ast.StructType) string {
+	for _, field := range structType.Fields.List {
+		if len(field.Names) == 0 {
+			continue
+		}
+
+		// 检查字段类型是否是 PathParams 或 core.PathParams
+		switch t := field.Type.(type) {
+		case *ast.Ident:
+			if t.Name == "PathParams" {
+				return field.Names[0].Name
+			}
+		case *ast.SelectorExpr:
+			if t.Sel.Name == "PathParams" {
+				return field.Names[0].Name
+			}
+		}
+	}
+	return ""
+}
+
+// getPathParamsType 获取 PathParams 的完整类型名
+func getPathParamsType(structType *ast.StructType) string {
+	for _, field := range structType.Fields.List {
+		if len(field.Names) == 0 {
+			continue
+		}
+
+		// 检查字段类型是否是 PathParams 或 core.PathParams
+		switch t := field.Type.(type) {
+		case *ast.Ident:
+			if t.Name == "PathParams" {
+				return "PathParams"
+			}
+		case *ast.SelectorExpr:
+			if t.Sel.Name == "PathParams" {
+				if x, ok := t.X.(*ast.Ident); ok {
+					return x.Name + ".PathParams"
+				}
+			}
+		}
+	}
+	return "PathParams"
+}
+
 // getModulePath 获取当前模块路径
 func getModulePath() string {
 	// 读取 go.mod 文件获取模块路径
@@ -504,8 +616,8 @@ type queryParam struct {
 	desc string
 }
 
-// parseQueryCommentsFromField 从字段注释中解析 query 参数
-func parseQueryCommentsFromField(field *ast.Field) []queryParam {
+// parseParamCommentsFromField 从字段注释中解析参数（query/path）
+func parseParamCommentsFromField(field *ast.Field) []queryParam {
 	var params []queryParam
 
 	// 检查字段的 Doc 注释
@@ -529,7 +641,7 @@ func parseQueryCommentsFromField(field *ast.Field) []queryParam {
 	return params
 }
 
-// parseQueryComment 解析单个 query 注释
+// parseQueryComment 解析单个参数注释
 // 格式：//@key(type):description
 func parseQueryComment(text string) (queryParam, bool) {
 	text = strings.TrimSpace(text)
@@ -577,6 +689,17 @@ func isQueryParamsField(field *ast.Field) bool {
 		return t.Name == "QueryParams"
 	case *ast.SelectorExpr:
 		return t.Sel.Name == "QueryParams"
+	}
+	return false
+}
+
+// isPathParamsField 判断字段是否是 PathParams 类型
+func isPathParamsField(field *ast.Field) bool {
+	switch t := field.Type.(type) {
+	case *ast.Ident:
+		return t.Name == "PathParams"
+	case *ast.SelectorExpr:
+		return t.Sel.Name == "PathParams"
 	}
 	return false
 }

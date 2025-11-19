@@ -187,3 +187,14 @@ func (req *CreateChatReq) WithRestrictedModeSetting(restrictedModeSetting Restri
 	req.RestrictedModeSetting = &restrictedModeSetting
 	return req
 }
+
+func NewDeleteChatReq() *DeleteChatReq {
+	return &DeleteChatReq{
+		path: make(core.PathParams),
+	}
+}
+
+func (req *DeleteChatReq) ChatId(chatId string) *DeleteChatReq {
+	req.path.Set("chat_id", chatId)
+	return req
+}

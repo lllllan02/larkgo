@@ -13,8 +13,8 @@ type chat struct {
 
 // Create 创建群组
 //
-// - 飞书接口文档: https://open.feishu.cn/document/server-docs/group/chat/create
-// - GitHub 源码地址: https://github.com/larksuite/oapi-sdk-go/blob/6116ef7bb0fa0dff80f8734335f8b8ad7697f0c7/service/im/v1/resource.go#L214
+//   - 飞书接口文档: https://open.feishu.cn/document/server-docs/group/chat/create
+//   - GitHub 源码地址: https://github.com/larksuite/oapi-sdk-go/blob/6116ef7bb0fa0dff80f8734335f8b8ad7697f0c7/service/im/v1/resource.go#L214
 //
 // 注意事项
 //   - 应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)
@@ -34,6 +34,36 @@ func (chat *chat) Create(c context.Context, req *CreateChatReq) (*CreateChatResp
 	}
 
 	resp := &CreateChatResp{Response: *response}
+	if err := chat.config.JSONUnmarshalBody(response, resp); err != nil {
+		return nil, err
+	}
+	return resp, nil
+}
+
+// Delete 删除群组
+//
+//   - 飞书接口文档: https://open.feishu.cn/document/server-docs/group/chat/delete
+//   - GitHub 源码地址: https://github.com/larksuite/oapi-sdk-go/blob/6116ef7bb0fa0dff80f8734335f8b8ad7697f0c7/service/im/v1/resource.go#L242
+//
+// 注意事项：
+//   - 应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)
+//   - 如果使用 tenant_access_token，需要机器人符合以下任一情况才可解散群：机器人是群主 || 机器人是群的创建者且具备[更新应用所创建群的群信息](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/chat-management/update)权限
+//   - 如果使用 user_access_token，需要对应的用户是群主才可解散群
+func (chat *chat) Delete(c context.Context, req *DeleteChatReq) (*DeleteChatResp, error) {
+	request := &core.Request{
+		HttpMethod:       http.MethodDelete,
+		ApiPath:          "/open-apis/im/v1/chats/:chat_id",
+		AccessTokenTypes: []core.AccessTokenType{core.AccessTokenTypeUser, core.AccessTokenTypeTenant},
+		PathParams:       req.path,
+		Body:             req,
+	}
+
+	response, err := chat.config.DoRequest(c, request)
+	if err != nil {
+		return nil, err
+	}
+
+	resp := &DeleteChatResp{Response: *response}
 	if err := chat.config.JSONUnmarshalBody(response, resp); err != nil {
 		return nil, err
 	}

@@ -249,3 +249,13 @@ type CreateChatRespData struct {
 	// 防泄密模式设置
 	RestrictedModeSetting *RestrictedModeSetting `json:"restricted_mode_setting,omitempty"`
 }
+
+type DeleteChatReq struct {
+	//@chat_id(string): 群 ID
+	path core.PathParams `json:"-"`
+}
+
+type DeleteChatResp struct {
+	core.Response `json:"-"`
+	core.CodeError
+}

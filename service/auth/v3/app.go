@@ -13,8 +13,8 @@ type appAccessToken struct {
 
 // Internal 获取应用访问令牌
 //
-// - 飞书接口文档: https://open.feishu.cn/document/server-docs/authentication-management/access-token/app_access_token_internal
-// - GitHub 源码地址: https://github.com/larksuite/oapi-sdk-go/blob/9494618e8cd35005d152819fff6749059f7a53d1/service/auth/v3/resource.go#L68
+//   - 飞书接口文档: https://open.feishu.cn/document/server-docs/authentication-management/access-token/app_access_token_internal
+//   - GitHub 源码地址: https://github.com/larksuite/oapi-sdk-go/blob/9494618e8cd35005d152819fff6749059f7a53d1/service/auth/v3/resource.go#L68
 func (a *appAccessToken) Internal(c context.Context, req *InternalAppAccessTokenReq) (*InternalAppAccessTokenResp, error) {
 	request := &core.Request{
 		HttpMethod: http.MethodPost,
