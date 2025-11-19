@@ -49,3 +49,15 @@ func TestChat_Link(t *testing.T) {
 	assert.NotNil(t, resp)
 	fmt.Printf("resp: %+v\n", core.ToMap(resp))
 }
+
+func TestChat_List(t *testing.T) {
+	req := NewListChatReq().
+		UserIdType(UserIdTypeUserId).
+		SortType(ChatSortTypeByCreateTimeAsc).
+		PageSize(20)
+
+	resp, err := v1.Chat.List(context.Background(), req)
+	assert.NoError(t, err)
+	assert.NotNil(t, resp)
+	fmt.Printf("resp: %+v\n", core.ToMap(resp))
+}

@@ -231,3 +231,29 @@ func (req *LinkChatReq) WithValidityPeriod(validityPeriod ValidityPeriod) *LinkC
 	req.ValidityPeriod = &validityPeriod
 	return req
 }
+
+func NewListChatReq() *ListChatReq {
+	return &ListChatReq{
+		query: make(core.QueryParams),
+	}
+}
+
+func (req *ListChatReq) UserIdType(userIdType UserIdType) *ListChatReq {
+	req.query.Set("user_id_type", fmt.Sprintf("%v", userIdType))
+	return req
+}
+
+func (req *ListChatReq) SortType(sortType ChatSortType) *ListChatReq {
+	req.query.Set("sort_type", fmt.Sprintf("%v", sortType))
+	return req
+}
+
+func (req *ListChatReq) PageToken(pageToken string) *ListChatReq {
+	req.query.Set("page_token", pageToken)
+	return req
+}
+
+func (req *ListChatReq) PageSize(pageSize int) *ListChatReq {
+	req.query.Set("page_size", strconv.FormatInt(int64(pageSize), 10))
+	return req
+}

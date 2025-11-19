@@ -409,3 +409,60 @@ type LinkChatRespData struct {
 	// 分享链接是否永久有效
 	IsPermanent *bool `json:"is_permanent,omitempty"`
 }
+
+type ListChatReq struct {
+	//@user_id_type(UserIdType): 用户 id 类型 (open_id/user_id/union_id)
+	//@sort_type(ChatSortType): 群排序类型
+	//@page_token(string): 分页游标
+	//@page_size(int): 每页数量,最大值为 100,默认为 20
+	query core.QueryParams `json:"-"`
+}
+
+type ListChatResp struct {
+	core.Response `json:"-"`
+	core.CodeError
+	Data *ListChatRespData `json:"data"`
+}
+
+type ListChatRespData struct {
+	// 是否还有更多项
+	HasMore *bool `json:"has_more,omitempty"`
+
+	// 分页标记，当 has_more 为 true 时，会同时返回新的 page_token，否则不返回 page_token
+	PageToken *string `json:"page_token,omitempty"`
+
+	// chat 列表
+	Items []*ListChat `json:"items,omitempty"`
+}
+
+type ListChat struct {
+	// 群组 ID，详情参见[群ID 说明](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/chat-id-description)
+	ChatId *string `json:"chat_id,omitempty"`
+
+	// 租户 Key，为租户在飞书上的唯一标识，用来换取对应的 tenant_access_token，也可以用作租户在应用中的唯一标识
+	TenantKey *string `json:"tenant_key,omitempty"`
+
+	// 群名称
+	Name *string `json:"name,omitempty"`
+
+	// 群描述
+	Description *string `json:"description,omitempty"`
+
+	// 群头像 URL
+	Avatar *string `json:"avatar,omitempty"`
+
+	// 群主 ID
+	OwnerId *string `json:"owner_id,omitempty"`
+
+	// 群主 ID 类型
+	OwnerIdType *UserIdType `json:"owner_id_type,omitempty"`
+
+	// 是否是外部群
+	External *bool `json:"external,omitempty"`
+
+	// 群标签
+	Labels []string `json:"labels,omitempty"`
+
+	// 群状态
+	ChatStatus *ChatStatus `json:"chat_status,omitempty"`
+}

@@ -87,7 +87,15 @@ const (
 type ValidityPeriod string
 
 const (
-	ValidityPeriodWeek        ValidityPeriod = "week"        // 7天
+	ValidityPeriodWeek        ValidityPeriod = "week"        // 7天(default)
 	ValidityPeriodYear        ValidityPeriod = "year"        // 1年
 	ValidityPeriodPermanently ValidityPeriod = "permanently" // 永久
+)
+
+// ChatSortType 群排序类型
+type ChatSortType string
+
+const (
+	ChatSortTypeByCreateTimeAsc  ChatSortType = "ByCreateTimeAsc"  // 按创建时间升序(default)
+	ChatSortTypeByActiveTimeDesc ChatSortType = "ByActiveTimeDesc" // 按活跃时间降序
 )
