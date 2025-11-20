@@ -564,3 +564,24 @@ func (req *GetChatAnnouncementReq) ChatId(chatId string) *GetChatAnnouncementReq
 	req.path.Set("chat_id", chatId)
 	return req
 }
+
+func NewPatchChatAnnouncementReq() *PatchChatAnnouncementReq {
+	return &PatchChatAnnouncementReq{
+		path: make(core.PathParams),
+	}
+}
+
+func (req *PatchChatAnnouncementReq) ChatId(chatId string) *PatchChatAnnouncementReq {
+	req.path.Set("chat_id", chatId)
+	return req
+}
+
+func (req *PatchChatAnnouncementReq) WithRevision(revision string) *PatchChatAnnouncementReq {
+	req.Revision = &revision
+	return req
+}
+
+func (req *PatchChatAnnouncementReq) WithRequests(requests ...string) *PatchChatAnnouncementReq {
+	req.Requests = requests
+	return req
+}

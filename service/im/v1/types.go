@@ -800,3 +800,21 @@ type GetChatAnnouncementRespData struct {
 	// 文档最新修改者 ID，ID 值与modifier_id_type 中的 ID 类型对应
 	ModifierId *string `json:"modifier_id,omitempty"`
 }
+
+type PatchChatAnnouncementReq struct {
+	//@chat_id(string): 群 ID
+	path core.PathParams `json:"-"`
+
+	// 文档当前版本号 int64 类型，[获取群公告信息](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/chat-announcement/get)接口会返回
+	Revision *string `json:"revision,omitempty"`
+
+	// 修改文档请求的序列化字段
+	//
+	// 更新公告信息的格式和更新[云文档](https://open.feishu.cn/document/ukTMukTMukTM/uYDM2YjL2AjN24iNwYjN)格式相同
+	Requests []string `json:"requests,omitempty"`
+}
+
+type PatchChatAnnouncementResp struct {
+	core.Response `json:"-"`
+	core.CodeError
+}
