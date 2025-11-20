@@ -698,3 +698,13 @@ type IsInChatChatMembersRespData struct {
 	// 用户或者机器人是否在群中
 	IsInChat *bool `json:"is_in_chat,omitempty"`
 }
+
+type MeJoinChatMembersReq struct {
+	//@chat_id(string): 群 ID
+	path core.PathParams `json:"-"`
+}
+
+type MeJoinChatMembersResp struct {
+	core.Response `json:"-"`
+	core.CodeError
+}

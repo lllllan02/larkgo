@@ -55,3 +55,13 @@ func TestChatMembers_IsInChat(t *testing.T) {
 	assert.NotNil(t, resp)
 	fmt.Printf("resp: %+v\n", core.ToMap(resp))
 }
+
+func TestChatMembers_MeJoin(t *testing.T) {
+	req := NewMeJoinChatMembersReq().
+		ChatId("oc_ee83d3e4637d0fc3e0131ff56ae0e762")
+
+	resp, err := v1.ChatMembers.MeJoin(context.Background(), req)
+	assert.NoError(t, err)
+	assert.NotNil(t, resp)
+	fmt.Printf("resp: %+v\n", core.ToMap(resp))
+}
