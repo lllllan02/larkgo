@@ -818,3 +818,43 @@ type PatchChatAnnouncementOldResp struct {
 	core.Response `json:"-"`
 	core.CodeError
 }
+
+type GetChatAnnouncementReq struct {
+	//@chat_id(string): 群 ID
+	path core.PathParams `json:"-"`
+
+	//@user_id_type(UserIdType): 用户 id 类型 (open_id/user_id/union_id)
+	query core.QueryParams `json:"-"`
+}
+
+type GetChatAnnouncementResp struct {
+	core.Response `json:"-"`
+	core.CodeError
+	Data *GetChatAnnouncementRespData `json:"data"`
+}
+
+type GetChatAnnouncementRespData struct {
+	// 当前版本号
+	RevisionId *int `json:"revision_id,omitempty"`
+
+	// 群公告生成的时间戳（秒）
+	CreateTime *string `json:"create_time_v2,omitempty"`
+
+	// 群公告更新的时间戳（秒）
+	UpdateTime *string `json:"update_time_v2,omitempty"`
+
+	// 群公告所有者 ID，ID 值与 owner_id_type 中的 ID 类型对应
+	OwnerId *string `json:"owner_id,omitempty"`
+
+	// 群公告所有者的 ID 类型
+	OwnerIdType *string `json:"owner_id_type,omitempty"`
+
+	// 群公告最新修改者 ID，ID 值与 modifier_id_type 中的 ID 类型对应
+	ModifierId *string `json:"modifier_id,omitempty"`
+
+	// 群公告最新修改者 id 类型
+	ModifierIdType *string `json:"modifier_id_type,omitempty"`
+
+	// 群公告类型
+	AnnouncementType *string `json:"announcement_type,omitempty"`
+}

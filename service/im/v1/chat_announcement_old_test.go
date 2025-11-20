@@ -9,7 +9,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestChatAnnouncement_Get(t *testing.T) {
+func TestChatAnnouncementOld_Get(t *testing.T) {
 	req := NewGetChatAnnouncementOldReq().
 		ChatId("oc_be2a237b03ac483a05c6521cb35386b2").
 		UserIdType(UserIdTypeOpenId)
@@ -20,7 +20,7 @@ func TestChatAnnouncement_Get(t *testing.T) {
 	fmt.Printf("resp: %+v\n", core.ToMap(resp))
 }
 
-func TestChatAnnouncement_Patch(t *testing.T) {
+func TestChatAnnouncementOld_Patch(t *testing.T) {
 	req := NewPatchChatAnnouncementOldReq().
 		ChatId("oc_be2a237b03ac483a05c6521cb35386b2").
 		WithRevision("1234567890").
