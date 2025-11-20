@@ -117,3 +117,20 @@ const (
 	SucceedType1                    // 将可用 ID 全部拉入群，返回拉群成功的响应，并展示不可用的 ID
 	SucceedType2                    // 存在不可用的 ID 会拉群失败，返回错误响应，并展示出不可用的 ID
 )
+
+// TabType 会话标签页类型
+type TabType string
+
+const (
+	TabTypeMessage          TabType = "message"           // 消息
+	TabTypeDoc              TabType = "doc"               // 文档
+	TabTypeDocList          TabType = "doc_list"          // 文档列表
+	TabTypePin              TabType = "pin"               // 置顶
+	TabTypeMeetingMinute    TabType = "meeting_minute"    // 会议纪要
+	TabTypeChatAnnouncement TabType = "chat_announcement" // 群公告
+	TabTypeUrl              TabType = "url"               // 链接
+	TabTypeFile             TabType = "file"              // 文件
+	TabTypeFilesResources   TabType = "files_resources"   // 文件资源
+	TabTypeImagesVideos     TabType = "images_videos"     // 图片视频
+	TabTypeTask             TabType = "task"              // 任务
+)

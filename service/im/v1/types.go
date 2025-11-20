@@ -858,3 +858,68 @@ type GetChatAnnouncementRespData struct {
 	// 群公告类型
 	AnnouncementType *string `json:"announcement_type,omitempty"`
 }
+
+type CreateChatTabReq struct {
+	//@chat_id(string): 群 ID
+	path core.PathParams `json:"-"`
+
+	// 会话标签页
+	//
+	// **注意**：一个群内最多只允许添加 20 个自定义会话标签页
+	ChatTabs []*ChatTab `json:"chat_tabs,omitempty"`
+}
+
+type CreateChatTabResp struct {
+	core.Response `json:"-"`
+	core.CodeError
+	Data *CreateChatTabRespData `json:"data"`
+}
+
+type CreateChatTabRespData struct {
+	// 会话标签页
+	ChatTabs []*ChatTab `json:"chat_tabs,omitempty"`
+}
+
+//builder:gen
+type ChatTab struct {
+	// Tab ID
+	TabId *string `json:"tab_id,omitempty"`
+
+	// Tab 名称
+	//
+	// **注意**：会话标签页的名称不能超过 30 个字符
+	TabName *string `json:"tab_name,omitempty"`
+
+	// Tab 类型
+	TabType *TabType `json:"tab_type,omitempty"`
+
+	// Tab 内容
+	TabContent *ChatTabContent `json:"tab_content,omitempty"`
+
+	// Tab 的配置
+	TabConfig *ChatTabConfig `json:"tab_config,omitempty"`
+}
+
+//builder:gen
+type ChatTabContent struct {
+	// URL 类型
+	Url *string `json:"url,omitempty"`
+
+	// Doc 链接
+	Doc *string `json:"doc,omitempty"`
+
+	// 会议纪要
+	MeetingMinute *string `json:"meeting_minute,omitempty"`
+
+	// 任务
+	Task *string `json:"task,omitempty"`
+}
+
+//builder:gen
+type ChatTabConfig struct {
+	// 群 Tab 图标
+	IconKey *string `json:"icon_key,omitempty"`
+
+	// 群 tab 是否 App 内嵌打开
+	IsBuiltIn *bool `json:"is_built_in,omitempty"`
+}

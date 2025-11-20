@@ -8,6 +8,7 @@ type V1 struct {
 	ChatManagers        *chatManagers        // 群管理员
 	ChatAnnouncement    *chatAnnouncement    // 群公告
 	ChatAnnouncementOld *chatAnnouncementOld // 群公告(旧版)
+	ChatTab             *chatTab             // 群标签
 }
 
 func NewV1(config *core.Config) *V1 {
@@ -17,5 +18,6 @@ func NewV1(config *core.Config) *V1 {
 		ChatManagers:        &chatManagers{config: config},
 		ChatAnnouncement:    &chatAnnouncement{config: config},
 		ChatAnnouncementOld: &chatAnnouncementOld{config: config},
+		ChatTab:             &chatTab{config: config},
 	}
 }

@@ -78,8 +78,8 @@ func (req *CreateChatReq) WithName(name string) *CreateChatReq {
 	return req
 }
 
-func (req *CreateChatReq) WithI18nNames(i18nNames I18nNames) *CreateChatReq {
-	req.I18nNames = &i18nNames
+func (req *CreateChatReq) WithI18nNames(i18nNames *I18nNames) *CreateChatReq {
+	req.I18nNames = i18nNames
 	return req
 }
 
@@ -183,8 +183,8 @@ func (req *CreateChatReq) WithHideMemberCountSetting(hideMemberCountSetting Perm
 	return req
 }
 
-func (req *CreateChatReq) WithRestrictedModeSetting(restrictedModeSetting RestrictedModeSetting) *CreateChatReq {
-	req.RestrictedModeSetting = &restrictedModeSetting
+func (req *CreateChatReq) WithRestrictedModeSetting(restrictedModeSetting *RestrictedModeSetting) *CreateChatReq {
+	req.RestrictedModeSetting = restrictedModeSetting
 	return req
 }
 
@@ -316,8 +316,8 @@ func (req *UpdateChatReq) WithAvatar(avatar string) *UpdateChatReq {
 	return req
 }
 
-func (req *UpdateChatReq) WithI18nNames(i18nNames I18nNames) *UpdateChatReq {
-	req.I18nNames = &i18nNames
+func (req *UpdateChatReq) WithI18nNames(i18nNames *I18nNames) *UpdateChatReq {
+	req.I18nNames = i18nNames
 	return req
 }
 
@@ -401,8 +401,8 @@ func (req *UpdateChatReq) WithHideMemberCountSetting(hideMemberCountSetting Perm
 	return req
 }
 
-func (req *UpdateChatReq) WithRestrictedModeSetting(restrictedModeSetting RestrictedModeSetting) *UpdateChatReq {
-	req.RestrictedModeSetting = &restrictedModeSetting
+func (req *UpdateChatReq) WithRestrictedModeSetting(restrictedModeSetting *RestrictedModeSetting) *UpdateChatReq {
+	req.RestrictedModeSetting = restrictedModeSetting
 	return req
 }
 
@@ -600,5 +600,88 @@ func (req *GetChatAnnouncementReq) UserIdType(userIdType UserIdType) *GetChatAnn
 
 func (req *GetChatAnnouncementReq) ChatId(chatId string) *GetChatAnnouncementReq {
 	req.path.Set("chat_id", chatId)
+	return req
+}
+
+func NewCreateChatTabReq() *CreateChatTabReq {
+	return &CreateChatTabReq{
+		path: make(core.PathParams),
+	}
+}
+
+func (req *CreateChatTabReq) ChatId(chatId string) *CreateChatTabReq {
+	req.path.Set("chat_id", chatId)
+	return req
+}
+
+func (req *CreateChatTabReq) WithChatTabs(chatTabs ...*ChatTab) *CreateChatTabReq {
+	req.ChatTabs = chatTabs
+	return req
+}
+
+func NewChatTab() *ChatTab {
+	return &ChatTab{}
+}
+
+func (req *ChatTab) WithTabId(tabId string) *ChatTab {
+	req.TabId = &tabId
+	return req
+}
+
+func (req *ChatTab) WithTabName(tabName string) *ChatTab {
+	req.TabName = &tabName
+	return req
+}
+
+func (req *ChatTab) WithTabType(tabType TabType) *ChatTab {
+	req.TabType = &tabType
+	return req
+}
+
+func (req *ChatTab) WithTabContent(tabContent *ChatTabContent) *ChatTab {
+	req.TabContent = tabContent
+	return req
+}
+
+func (req *ChatTab) WithTabConfig(tabConfig *ChatTabConfig) *ChatTab {
+	req.TabConfig = tabConfig
+	return req
+}
+
+func NewChatTabContent() *ChatTabContent {
+	return &ChatTabContent{}
+}
+
+func (req *ChatTabContent) WithUrl(url string) *ChatTabContent {
+	req.Url = &url
+	return req
+}
+
+func (req *ChatTabContent) WithDoc(doc string) *ChatTabContent {
+	req.Doc = &doc
+	return req
+}
+
+func (req *ChatTabContent) WithMeetingMinute(meetingMinute string) *ChatTabContent {
+	req.MeetingMinute = &meetingMinute
+	return req
+}
+
+func (req *ChatTabContent) WithTask(task string) *ChatTabContent {
+	req.Task = &task
+	return req
+}
+
+func NewChatTabConfig() *ChatTabConfig {
+	return &ChatTabConfig{}
+}
+
+func (req *ChatTabConfig) WithIconKey(iconKey string) *ChatTabConfig {
+	req.IconKey = &iconKey
+	return req
+}
+
+func (req *ChatTabConfig) WithIsBuiltIn(isBuiltIn bool) *ChatTabConfig {
+	req.IsBuiltIn = &isBuiltIn
 	return req
 }
