@@ -708,3 +708,33 @@ type MeJoinChatMembersResp struct {
 	core.Response `json:"-"`
 	core.CodeError
 }
+
+type AddChatManagersReq struct {
+	//@chat_id(string): 群 ID
+	path core.PathParams `json:"-"`
+
+	//@member_id_type(MemberIdType): 用户 id 类型 (open_id/user_id/union_id/app_id)
+	query core.QueryParams `json:"-"`
+
+	// 要增加的 manager_id
+	//
+	// **注意**：
+	// 	- 对于普通群，最多指定 10 个管理员
+	// 	- 对于超大群，最多指定 20 个管理员
+	// 	- 每次请求最多指定 50 个用户或者 5 个机器人
+	ManagerIds []string `json:"manager_ids,omitempty"`
+}
+
+type AddChatManagersResp struct {
+	core.Response `json:"-"`
+	core.CodeError
+	Data *AddChatManagersRespData `json:"data"`
+}
+
+type AddChatManagersRespData struct {
+	// 群目前用户类型的管理员 id
+	ChatManagers []string `json:"chat_managers,omitempty"`
+
+	// 群目前机器人类型的管理员 id
+	ChatBotManagers []string `json:"chat_bot_managers,omitempty"`
+}

@@ -503,3 +503,25 @@ func (req *MeJoinChatMembersReq) ChatId(chatId string) *MeJoinChatMembersReq {
 	req.path.Set("chat_id", chatId)
 	return req
 }
+
+func NewAddChatManagersReq() *AddChatManagersReq {
+	return &AddChatManagersReq{
+		query: make(core.QueryParams),
+		path:  make(core.PathParams),
+	}
+}
+
+func (req *AddChatManagersReq) MemberIdType(memberIdType MemberIdType) *AddChatManagersReq {
+	req.query.Set("member_id_type", fmt.Sprintf("%v", memberIdType))
+	return req
+}
+
+func (req *AddChatManagersReq) ChatId(chatId string) *AddChatManagersReq {
+	req.path.Set("chat_id", chatId)
+	return req
+}
+
+func (req *AddChatManagersReq) WithManagerIds(managerIds ...string) *AddChatManagersReq {
+	req.ManagerIds = managerIds
+	return req
+}
