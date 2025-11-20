@@ -70,11 +70,12 @@ func scanAndGenerate(rootDir string) error {
 }
 
 type generatorContext struct {
-	methodsBuf  bytes.Buffer
-	needStrconv bool
-	needFmt     bool
-	needCore    bool
-	hasContent  bool
+	methodsBuf     bytes.Buffer
+	needStrconv    bool
+	needFmt        bool
+	needCore       bool
+	hasContent     bool
+	definedStructs map[string]bool
 }
 
 func generateBuilder(inputFile, outputFile string) error {
@@ -84,9 +85,21 @@ func generateBuilder(inputFile, outputFile string) error {
 		return fmt.Errorf("解析文件失败: %w", err)
 	}
 
-	ctx := &generatorContext{}
+	ctx := &generatorContext{
+		definedStructs: make(map[string]bool),
+	}
 
-	// 遍历所有类型定义
+	// 1. 收集所有定义的结构体名称
+	ast.Inspect(node, func(n ast.Node) bool {
+		if typeSpec, ok := n.(*ast.TypeSpec); ok {
+			if _, ok := typeSpec.Type.(*ast.StructType); ok {
+				ctx.definedStructs[typeSpec.Name.Name] = true
+			}
+		}
+		return true
+	})
+
+	// 2. 遍历所有类型定义并生成代码
 	ast.Inspect(node, func(n ast.Node) bool {
 		processStructDeclaration(n, ctx)
 		return true
@@ -314,7 +327,7 @@ func generateFieldMethods(ctx *generatorContext, structType *ast.StructType, str
 		}
 
 		// 获取字段类型信息
-		paramType, assignExpr := extractFieldTypeInfo(field, fieldName)
+		paramType, assignExpr := extractFieldTypeInfo(ctx, field, fieldName)
 		if paramType == "" {
 			continue
 		}
@@ -341,15 +354,21 @@ func extractJsonTag(field *ast.Field) string {
 }
 
 // extractFieldTypeInfo 提取字段类型信息，返回 (参数类型, 赋值表达式)
-func extractFieldTypeInfo(field *ast.Field, fieldName string) (paramType string, assignExpr string) {
+func extractFieldTypeInfo(ctx *generatorContext, field *ast.Field, fieldName string) (paramType string, assignExpr string) {
 	paramName := strings.ToLower(fieldName[:1]) + fieldName[1:]
 
 	switch t := field.Type.(type) {
 	case *ast.StarExpr:
-		// 指针类型: *T -> 参数类型 T，赋值 &paramName
+		// 指针类型: *T
 		typeName := extractTypeName(t.X)
 		if typeName == "" {
 			return "", ""
+		}
+
+		// 如果是指向结构体的指针，参数也使用指针类型，并直接赋值
+		// 否则（如基本类型指针），参数使用值类型，赋值时取地址
+		if ctx.definedStructs[typeName] {
+			return "*" + typeName, fmt.Sprintf("req.%s = %s", fieldName, paramName)
 		}
 		return typeName, fmt.Sprintf("req.%s = &%s", fieldName, paramName)
 
