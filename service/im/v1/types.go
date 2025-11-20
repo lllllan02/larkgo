@@ -404,7 +404,7 @@ type LinkChatRespData struct {
 	ShareLink *string `json:"share_link,omitempty"`
 
 	// 分享链接过期时间戳（秒级）
-	ExpireTime *string `json:"expire_time,omitempty"`
+	ExpireTime *int64 `json:"expire_time,omitempty"`
 
 	// 分享链接是否永久有效
 	IsPermanent *bool `json:"is_permanent,omitempty"`
@@ -776,13 +776,13 @@ type GetChatAnnouncementRespOldData struct {
 	Content *string `json:"content,omitempty"`
 
 	// 文档当前版本号 纯数字
-	Revision *string `json:"revision,omitempty"`
+	Revision *int64 `json:"revision,omitempty"`
 
 	// 文档生成的时间戳（秒）
-	CreateTime *string `json:"create_time,omitempty"`
+	CreateTime *int64 `json:"create_time,omitempty"`
 
 	// 文档更新的时间戳（秒）
-	UpdateTime *string `json:"update_time,omitempty"`
+	UpdateTime *int64 `json:"update_time,omitempty"`
 
 	// 文档所有者的 ID 类型
 	// 	- 如果所有者是用户，则与查询参数中的user_id_type 相同；取值为`open_id` `user_id` `union_id` 其中之一，不同 ID 的说明参见 [用户相关的 ID 概念](https://open.feishu.cn/document/home/user-identity-introduction/introduction)
@@ -806,7 +806,7 @@ type PatchChatAnnouncementOldReq struct {
 	path core.PathParams `json:"-"`
 
 	// 文档当前版本号 int64 类型，[获取群公告信息](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/chat-announcement/get)接口会返回
-	Revision *string `json:"revision,omitempty"`
+	Revision *int64 `json:"revision,omitempty"`
 
 	// 修改文档请求的序列化字段
 	//
@@ -835,13 +835,13 @@ type GetChatAnnouncementResp struct {
 
 type GetChatAnnouncementRespData struct {
 	// 当前版本号
-	RevisionId *int `json:"revision_id,omitempty"`
+	RevisionId *int64 `json:"revision_id,omitempty"`
 
 	// 群公告生成的时间戳（秒）
-	CreateTime *string `json:"create_time_v2,omitempty"`
+	CreateTime *int64 `json:"create_time_v2,omitempty"`
 
 	// 群公告更新的时间戳（秒）
-	UpdateTime *string `json:"update_time_v2,omitempty"`
+	UpdateTime *int64 `json:"update_time_v2,omitempty"`
 
 	// 群公告所有者 ID，ID 值与 owner_id_type 中的 ID 类型对应
 	OwnerId *string `json:"owner_id,omitempty"`

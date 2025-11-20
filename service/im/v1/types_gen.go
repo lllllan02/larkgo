@@ -576,7 +576,7 @@ func (req *PatchChatAnnouncementOldReq) ChatId(chatId string) *PatchChatAnnounce
 	return req
 }
 
-func (req *PatchChatAnnouncementOldReq) WithRevision(revision string) *PatchChatAnnouncementOldReq {
+func (req *PatchChatAnnouncementOldReq) WithRevision(revision int64) *PatchChatAnnouncementOldReq {
 	req.Revision = &revision
 	return req
 }

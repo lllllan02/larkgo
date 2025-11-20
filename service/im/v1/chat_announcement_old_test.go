@@ -23,7 +23,6 @@ func TestChatAnnouncementOld_Get(t *testing.T) {
 func TestChatAnnouncementOld_Patch(t *testing.T) {
 	req := NewPatchChatAnnouncementOldReq().
 		ChatId("oc_be2a237b03ac483a05c6521cb35386b2").
-		WithRevision("1234567890").
 		WithRequests("{\"type\":\"text\",\"text\":\"Hello, world!\"}")
 
 	resp, err := v1.ChatAnnouncementOld.Patch(context.Background(), req)
