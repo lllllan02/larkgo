@@ -481,3 +481,14 @@ func (req *GetChatMembersReq) ChatId(chatId string) *GetChatMembersReq {
 	req.path.Set("chat_id", chatId)
 	return req
 }
+
+func NewIsInChatMembersReq() *IsInChatMembersReq {
+	return &IsInChatMembersReq{
+		path: make(core.PathParams),
+	}
+}
+
+func (req *IsInChatMembersReq) ChatId(chatId string) *IsInChatMembersReq {
+	req.path.Set("chat_id", chatId)
+	return req
+}

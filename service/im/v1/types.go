@@ -682,3 +682,19 @@ type ListMember struct {
 	// 为租户在飞书上的唯一标识，用来换取对应的 tenant_access_token，也可以用作租户在应用中的唯一标识
 	TenantKey *string `json:"tenant_key,omitempty"`
 }
+
+type IsInChatMembersReq struct {
+	//@chat_id(string): 群 ID
+	path core.PathParams `json:"-"`
+}
+
+type IsInChatMembersResp struct {
+	core.Response `json:"-"`
+	core.CodeError
+	Data *IsInChatChatMembersRespData `json:"data"`
+}
+
+type IsInChatChatMembersRespData struct {
+	// 用户或者机器人是否在群中
+	IsInChat *bool `json:"is_in_chat,omitempty"`
+}

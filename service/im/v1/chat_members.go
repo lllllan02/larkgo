@@ -111,3 +111,31 @@ func (cm *chatMembers) Get(c context.Context, req *GetChatMembersReq) (*GetChatM
 	}
 	return resp, nil
 }
+
+// IsInChat 判断用户或者机器人是否在群中
+//
+//   - 飞书接口文档: https://open.feishu.cn/document/server-docs/group/chat-member/is_in_chat
+//   - GitHub 源码地址: https://github.com/larksuite/oapi-sdk-go/blob/6116ef7bb0fa0dff80f8734335f8b8ad7697f0c7/service/im/v1/resource.go#L630
+//
+// 注意事项
+//   - 应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)
+//   - 获取内部群信息时，操作者须与群组在同一租户下
+func (cm *chatMembers) IsInChat(c context.Context, req *IsInChatMembersReq) (*IsInChatMembersResp, error) {
+	request := &core.Request{
+		HttpMethod:       http.MethodGet,
+		ApiPath:          "/open-apis/im/v1/chats/:chat_id/members/is_in_chat",
+		AccessTokenTypes: []core.AccessTokenType{core.AccessTokenTypeUser, core.AccessTokenTypeTenant},
+		PathParams:       req.path,
+	}
+
+	response, err := cm.config.DoRequest(c, request)
+	if err != nil {
+		return nil, err
+	}
+
+	resp := &IsInChatMembersResp{Response: *response}
+	if err := cm.config.JSONUnmarshalBody(response, resp); err != nil {
+		return nil, err
+	}
+	return resp, nil
+}
