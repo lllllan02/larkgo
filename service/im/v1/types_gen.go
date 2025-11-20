@@ -685,3 +685,19 @@ func (req *ChatTabConfig) WithIsBuiltIn(isBuiltIn bool) *ChatTabConfig {
 	req.IsBuiltIn = &isBuiltIn
 	return req
 }
+
+func NewDeleteChatTabReq() *DeleteChatTabReq {
+	return &DeleteChatTabReq{
+		path: make(core.PathParams),
+	}
+}
+
+func (req *DeleteChatTabReq) ChatId(chatId string) *DeleteChatTabReq {
+	req.path.Set("chat_id", chatId)
+	return req
+}
+
+func (req *DeleteChatTabReq) WithTabIds(tabIds ...string) *DeleteChatTabReq {
+	req.TabIds = tabIds
+	return req
+}

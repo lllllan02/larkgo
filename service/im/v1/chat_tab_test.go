@@ -15,7 +15,7 @@ func TestChatTab_Create(t *testing.T) {
 		WithChatTabs(
 			NewChatTab().
 				WithTabName("test").
-				WithTabType("url").
+				WithTabType(TabTypeUrl).
 				WithTabContent(
 					NewChatTabContent().
 						WithUrl("https://www.baidu.com"),
@@ -23,6 +23,17 @@ func TestChatTab_Create(t *testing.T) {
 		)
 
 	resp, err := v1.ChatTab.Create(context.Background(), req)
+	assert.NoError(t, err)
+	assert.NotNil(t, resp)
+	fmt.Printf("resp: %+v\n", core.ToMap(resp))
+}
+
+func TestChatTab_Delete(t *testing.T) {
+	req := NewDeleteChatTabReq().
+		ChatId("oc_be2a237b03ac483a05c6521cb35386b2").
+		WithTabIds("7574725264349891538")
+
+	resp, err := v1.ChatTab.Delete(context.Background(), req)
 	assert.NoError(t, err)
 	assert.NotNil(t, resp)
 	fmt.Printf("resp: %+v\n", core.ToMap(resp))

@@ -923,3 +923,24 @@ type ChatTabConfig struct {
 	// 群 tab 是否 App 内嵌打开
 	IsBuiltIn *bool `json:"is_built_in,omitempty"`
 }
+
+type DeleteChatTabReq struct {
+	//@chat_id(string): 群 ID
+	path core.PathParams `json:"-"`
+
+	// 会话标签页ID列表
+	//
+	// Tab ID可以在[添加会话标签页](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/chat-tab/create)与[拉取会话标签页](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/chat-tab/list_tabs)的返回值中获取
+	TabIds []string `json:"tab_ids,omitempty"`
+}
+
+type DeleteChatTabResp struct {
+	core.Response `json:"-"`
+	core.CodeError
+	Data *DeleteTabsChatTabRespData `json:"data"`
+}
+
+type DeleteTabsChatTabRespData struct {
+	// 删除的会话标签页
+	DeletedChatTabs []*ChatTab `json:"deleted_chat_tabs,omitempty"`
+}

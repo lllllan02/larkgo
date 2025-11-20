@@ -44,3 +44,35 @@ func (ct *chatTab) Create(c context.Context, req *CreateChatTabReq) (*CreateChat
 	}
 	return resp, nil
 }
+
+// Delete 删除会话标签页
+//
+//   - 飞书接口文档: https://open.feishu.cn/document/server-docs/group/chat-tab/delete_tabs
+//   - GitHub 源码地址: https://github.com/larksuite/oapi-sdk-go/blob/6116ef7bb0fa0dff80f8734335f8b8ad7697f0c7/service/im/v1/resource.go#L918
+//
+// 注意事项
+//   - 应用需要开启[机器人能力](https://open.feishu.cn/document/uAjLw4CM/ugTN1YjL4UTN24CO1UjN/trouble-shooting/how-to-enable-bot-ability)
+//   - 机器人或授权用户必须在群里
+//   - 只允许删除类型为 `doc` 和 `url` 的会话标签页
+//   - 在开启 ==仅群主和管理员可管理标签页== 的设置时，仅群主和群管理员可以删除会话标签页
+//   - 操作内部群时，操作者须与群组在同一租户下
+func (ct *chatTab) Delete(c context.Context, req *DeleteChatTabReq) (*DeleteChatTabResp, error) {
+	request := &core.Request{
+		HttpMethod:       http.MethodDelete,
+		ApiPath:          "/open-apis/im/v1/chats/:chat_id/chat_tabs/delete_tabs",
+		AccessTokenTypes: []core.AccessTokenType{core.AccessTokenTypeTenant, core.AccessTokenTypeUser},
+		PathParams:       req.path,
+		Body:             req,
+	}
+
+	response, err := ct.config.DoRequest(c, request)
+	if err != nil {
+		return nil, err
+	}
+
+	resp := &DeleteChatTabResp{Response: *response}
+	if err := ct.config.JSONUnmarshalBody(response, resp); err != nil {
+		return nil, err
+	}
+	return resp, nil
+}
