@@ -525,3 +525,25 @@ func (req *AddChatManagersReq) WithManagerIds(managerIds ...string) *AddChatMana
 	req.ManagerIds = managerIds
 	return req
 }
+
+func NewDeleteChatManagersReq() *DeleteChatManagersReq {
+	return &DeleteChatManagersReq{
+		query: make(core.QueryParams),
+		path:  make(core.PathParams),
+	}
+}
+
+func (req *DeleteChatManagersReq) MemberIdType(memberIdType MemberIdType) *DeleteChatManagersReq {
+	req.query.Set("member_id_type", fmt.Sprintf("%v", memberIdType))
+	return req
+}
+
+func (req *DeleteChatManagersReq) ChatId(chatId string) *DeleteChatManagersReq {
+	req.path.Set("chat_id", chatId)
+	return req
+}
+
+func (req *DeleteChatManagersReq) WithManagerIds(managerIds ...string) *DeleteChatManagersReq {
+	req.ManagerIds = managerIds
+	return req
+}

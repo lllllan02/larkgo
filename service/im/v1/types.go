@@ -738,3 +738,22 @@ type AddChatManagersRespData struct {
 	// 群目前机器人类型的管理员 id
 	ChatBotManagers []string `json:"chat_bot_managers,omitempty"`
 }
+
+type DeleteChatManagersReq struct {
+	//@chat_id(string): 群 ID
+	path core.PathParams `json:"-"`
+
+	//@member_id_type(MemberIdType): 用户 id 类型 (open_id/user_id/union_id/app_id)
+	query core.QueryParams `json:"-"`
+
+	// 要删除的 manager_id
+	//
+	// **注意**
+	// 	- 每次请求最多指定 50 个用户或者 5 个机器人
+	ManagerIds []string `json:"manager_ids,omitempty"`
+}
+
+type DeleteChatManagersResp struct {
+	core.Response `json:"-"`
+	core.CodeError
+}
