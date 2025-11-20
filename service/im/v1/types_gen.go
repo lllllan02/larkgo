@@ -548,40 +548,40 @@ func (req *DeleteChatManagersReq) WithManagerIds(managerIds ...string) *DeleteCh
 	return req
 }
 
-func NewGetChatAnnouncementReq() *GetChatAnnouncementReq {
-	return &GetChatAnnouncementReq{
+func NewGetChatAnnouncementOldReq() *GetChatAnnouncementOldReq {
+	return &GetChatAnnouncementOldReq{
 		query: make(core.QueryParams),
 		path:  make(core.PathParams),
 	}
 }
 
-func (req *GetChatAnnouncementReq) UserIdType(userIdType UserIdType) *GetChatAnnouncementReq {
+func (req *GetChatAnnouncementOldReq) UserIdType(userIdType UserIdType) *GetChatAnnouncementOldReq {
 	req.query.Set("user_id_type", fmt.Sprintf("%v", userIdType))
 	return req
 }
 
-func (req *GetChatAnnouncementReq) ChatId(chatId string) *GetChatAnnouncementReq {
+func (req *GetChatAnnouncementOldReq) ChatId(chatId string) *GetChatAnnouncementOldReq {
 	req.path.Set("chat_id", chatId)
 	return req
 }
 
-func NewPatchChatAnnouncementReq() *PatchChatAnnouncementReq {
-	return &PatchChatAnnouncementReq{
+func NewPatchChatAnnouncementOldReq() *PatchChatAnnouncementOldReq {
+	return &PatchChatAnnouncementOldReq{
 		path: make(core.PathParams),
 	}
 }
 
-func (req *PatchChatAnnouncementReq) ChatId(chatId string) *PatchChatAnnouncementReq {
+func (req *PatchChatAnnouncementOldReq) ChatId(chatId string) *PatchChatAnnouncementOldReq {
 	req.path.Set("chat_id", chatId)
 	return req
 }
 
-func (req *PatchChatAnnouncementReq) WithRevision(revision string) *PatchChatAnnouncementReq {
+func (req *PatchChatAnnouncementOldReq) WithRevision(revision string) *PatchChatAnnouncementOldReq {
 	req.Revision = &revision
 	return req
 }
 
-func (req *PatchChatAnnouncementReq) WithRequests(requests ...string) *PatchChatAnnouncementReq {
+func (req *PatchChatAnnouncementOldReq) WithRequests(requests ...string) *PatchChatAnnouncementOldReq {
 	req.Requests = requests
 	return req
 }

@@ -758,7 +758,7 @@ type DeleteChatManagersResp struct {
 	core.CodeError
 }
 
-type GetChatAnnouncementReq struct {
+type GetChatAnnouncementOldReq struct {
 	//@chat_id(string): 群 ID
 	path core.PathParams `json:"-"`
 
@@ -766,12 +766,12 @@ type GetChatAnnouncementReq struct {
 	query core.QueryParams `json:"-"`
 }
 
-type GetChatAnnouncementResp struct {
+type GetChatAnnouncementOldResp struct {
 	core.Response `json:"-"`
 	core.CodeError
 }
 
-type GetChatAnnouncementRespData struct {
+type GetChatAnnouncementRespOldData struct {
 	// 云文档序列化信息
 	Content *string `json:"content,omitempty"`
 
@@ -801,7 +801,7 @@ type GetChatAnnouncementRespData struct {
 	ModifierId *string `json:"modifier_id,omitempty"`
 }
 
-type PatchChatAnnouncementReq struct {
+type PatchChatAnnouncementOldReq struct {
 	//@chat_id(string): 群 ID
 	path core.PathParams `json:"-"`
 
@@ -814,7 +814,7 @@ type PatchChatAnnouncementReq struct {
 	Requests []string `json:"requests,omitempty"`
 }
 
-type PatchChatAnnouncementResp struct {
+type PatchChatAnnouncementOldResp struct {
 	core.Response `json:"-"`
 	core.CodeError
 }
