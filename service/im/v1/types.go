@@ -757,3 +757,46 @@ type DeleteChatManagersResp struct {
 	core.Response `json:"-"`
 	core.CodeError
 }
+
+type GetChatAnnouncementReq struct {
+	//@chat_id(string): 群 ID
+	path core.PathParams `json:"-"`
+
+	//@user_id_type(UserIdType): 用户 id 类型 (open_id/user_id/union_id)
+	query core.QueryParams `json:"-"`
+}
+
+type GetChatAnnouncementResp struct {
+	core.Response `json:"-"`
+	core.CodeError
+}
+
+type GetChatAnnouncementRespData struct {
+	// 云文档序列化信息
+	Content *string `json:"content,omitempty"`
+
+	// 文档当前版本号 纯数字
+	Revision *string `json:"revision,omitempty"`
+
+	// 文档生成的时间戳（秒）
+	CreateTime *string `json:"create_time,omitempty"`
+
+	// 文档更新的时间戳（秒）
+	UpdateTime *string `json:"update_time,omitempty"`
+
+	// 文档所有者的 ID 类型
+	// 	- 如果所有者是用户，则与查询参数中的user_id_type 相同；取值为`open_id` `user_id` `union_id` 其中之一，不同 ID 的说明参见 [用户相关的 ID 概念](https://open.feishu.cn/document/home/user-identity-introduction/introduction)
+	// 	- 如果所有者是机器人，为机器人应用的 `app_id`，详情参见  [获取应用身份访问凭证](https://open.feishu.cn/document/ukTMukTMukTM/ukDNz4SO0MjL5QzM/g)
+	OwnerIdType *string `json:"owner_id_type,omitempty"`
+
+	// 文档所有者 ID，ID 值与owner_id_type 中的ID类型对应
+	OwnerId *string `json:"owner_id,omitempty"`
+
+	// 文档最新修改者 id 类型
+	// 	- 如果修改者是用户，则与查询参数中的user_id_type 相同；取值为`open_id` `user_id` `union_id` 其中之一，不同 ID 的说明参见 [用户相关的 ID 概念](https://open.feishu.cn/document/home/user-identity-introduction/introduction)
+	// 	- 如果修改者是机器人，为机器人应用的 `app_id`，详情参见  [获取应用身份访问凭证](https://open.feishu.cn/document/ukTMukTMukTM/ukDNz4SO0MjL5QzM/g)
+	ModifierIdType *string `json:"modifier_id_type,omitempty"`
+
+	// 文档最新修改者 ID，ID 值与modifier_id_type 中的 ID 类型对应
+	ModifierId *string `json:"modifier_id,omitempty"`
+}

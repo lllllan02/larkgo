@@ -547,3 +547,20 @@ func (req *DeleteChatManagersReq) WithManagerIds(managerIds ...string) *DeleteCh
 	req.ManagerIds = managerIds
 	return req
 }
+
+func NewGetChatAnnouncementReq() *GetChatAnnouncementReq {
+	return &GetChatAnnouncementReq{
+		query: make(core.QueryParams),
+		path:  make(core.PathParams),
+	}
+}
+
+func (req *GetChatAnnouncementReq) UserIdType(userIdType UserIdType) *GetChatAnnouncementReq {
+	req.query.Set("user_id_type", fmt.Sprintf("%v", userIdType))
+	return req
+}
+
+func (req *GetChatAnnouncementReq) ChatId(chatId string) *GetChatAnnouncementReq {
+	req.path.Set("chat_id", chatId)
+	return req
+}
